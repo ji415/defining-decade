@@ -1,4 +1,7 @@
 (() => {
+  const extensions = window.DecadeExtensions;
+  if (!extensions) throw new Error("extension-runtime.js must load before onboarding.js");
+
   const ONBOARDING_VERSION = 1;
   const ROUTES = {
     work: "#tools/jam",
@@ -169,13 +172,9 @@
     if (toolsNav) toolsNav.textContent = "我的十年";
   }
 
-  installOnboarding();
-
-  const baseRenderTools = renderTools;
-  renderTools = function renderToolsWithProfileEntry() {
-    baseRenderTools();
-    if (state.tool || state.view !== "tools") return;
-    const hero = $("main").querySelector(".dashboard-hero");
+  function addProfileEntry({ overview, main }) {
+    if (!overview || state.view !== "tools") return;
+    const hero = main.querySelector(".dashboard-hero");
     const timelineButton = hero?.querySelector(".dashboard-timeline");
     if (!hero || !timelineButton || $("editDecadeProfile")) return;
 
@@ -191,7 +190,11 @@
     button.textContent = "调整我的起点";
     actions.appendChild(button);
     button.addEventListener("click", openOnboarding);
-  };
+  }
 
+  installOnboarding();
+  extensions.on("tools:after", addProfileEntry);
+
+  // If this script loads on a direct tools URL, refresh once so its registered hook runs.
   if (state.view === "tools" && !state.tool) renderTools();
 })();
