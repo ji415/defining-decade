@@ -29,12 +29,12 @@
     return (store.timelineMilestones || [])
       .map((item) => ({
         id: String(item.id || ""),
-        age: clamp(ageNumber(item.age, startAge), startAge, endAge),
+        age: ageNumber(item.age, startAge),
         category: CATEGORIES[item.category] ? item.category : "other",
         title: String(item.title || "").trim(),
         note: String(item.note || "").trim()
       }))
-      .filter((item) => item.id && item.title)
+      .filter((item) => item.id && item.title && item.age >= startAge && item.age <= endAge)
       .sort((a, b) => a.age - b.age || a.title.localeCompare(b.title, "zh-CN"));
   }
 
