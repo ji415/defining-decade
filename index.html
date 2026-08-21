@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>人生十年 · 不可辜负的 20 岁到 30 岁</title>
+  <meta name="description" content="梅格·杰伊《人生十年》私人速读：不当书页翻，当咨询室用。工作、爱情、大脑与身体。" />
+  <meta name="theme-color" content="#e30613" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23e30613' width='100' height='100'/><circle fill='%23ffd000' cx='50' cy='50' r='22'/></svg>" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <section id="cover" class="cover" data-view="cover">
+    <div class="cover-red">
+      <p class="cover-en">THE DEFINING DECADE</p>
+      <svg class="jumper" viewBox="0 0 280 400" aria-hidden="true">
+        <g fill="#FFD000" transform="rotate(18 140 200)">
+          <ellipse cx="168" cy="58" rx="28" ry="32"/>
+          <path d="M156 86c6 22 10 40 8 62l54-28 22-48 22 8-18 56-62 36c8 24 6 52-6 84l-18 92-28-6 20-90c8-28 6-50-4-68l-22 44-70 78-22-18 68-82c12-16 22-36 18-58L80 140 52 96l22-14 42 48c14-10 30-18 40-44z"/>
+        </g>
+      </svg>
+    </div>
+    <div class="cover-type">
+      <p class="cover-author">梅格 · 杰伊</p>
+      <h1>人生十年</h1>
+      <p class="cover-sub">不可辜负的<br />20 岁到 30 岁</p>
+      <p class="cover-line">30 岁不是新的 20 岁。<br />你已经在最重要的十年里。</p>
+      <button class="enter" id="enterBtn" type="button">进入这十年</button>
+      <p class="cover-note">私人速读笔记 · 不当书页翻 · 当咨询室用</p>
+    </div>
+  </section>
+
+  <div id="app" class="app" hidden>
+    <header class="top">
+      <button class="brand" id="brandBtn" type="button" title="回封面">
+        <span class="brand-mark"></span>
+        <span class="brand-text">人生十年</span>
+      </button>
+      <nav class="parts" aria-label="三部分">
+        <button data-part="open" type="button">开场</button>
+        <button data-part="work" type="button">工作</button>
+        <button data-part="love" type="button">爱情</button>
+        <button data-part="body" type="button">大脑与身体</button>
+        <button data-part="close" type="button">后记</button>
+        <button data-part="tools" type="button">练习</button>
+      </nav>
+      <div class="top-right">
+        <span class="progress" id="progressLabel">0 / 21</span>
+        <button class="map-btn" id="mapBtn" type="button">总图</button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="rail" id="rail" aria-label="章节"></aside>
+      <main class="main" id="main"></main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
