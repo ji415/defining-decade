@@ -53,6 +53,22 @@
     return document.querySelector('input[name="decadeFocus"]:checked')?.value || null;
   }
 
+  function prefillOnboarding() {
+    const profile = loadStore().decadeProfile || {};
+    $("onboardingAge").value = Number.isFinite(Number(profile.age)) ? profile.age : "";
+    document.querySelectorAll('input[name="decadeFocus"]').forEach((radio) => {
+      radio.checked = radio.value === profile.focus;
+    });
+  }
+
+  function openOnboarding() {
+    const dialog = $("decadeOnboarding");
+    if (!dialog || dialog.open) return;
+    prefillOnboarding();
+    dialog.showModal();
+    requestAnimationFrame(() => $("onboardingAge")?.focus());
+  }
+
   function completeOnboarding() {
     const ageInput = $("onboardingAge");
     const rawAge = ageInput.value.trim();
@@ -139,13 +155,31 @@
 
     // Existing app navigation runs first; then the first-use guide opens on top.
     $("enterBtn")?.addEventListener("click", () => {
-      if (shouldShow()) requestAnimationFrame(() => $("decadeOnboarding").showModal());
+      if (shouldShow()) requestAnimationFrame(openOnboarding);
     });
 
     if (shouldShow() && location.hash && location.hash !== "#cover") {
-      requestAnimationFrame(() => $("decadeOnboarding").showModal());
+      requestAnimationFrame(openOnboarding);
     }
+
+    const toolsNav = document.querySelector('.parts [data-part="tools"]');
+    if (toolsNav) toolsNav.textContent = "我的十年";
   }
 
   installOnboarding();
+
+  const baseRenderTools = renderTools;
+  renderTools = function renderToolsWithProfileEntry() {
+    baseRenderTools();
+    if (state.tool || state.view !== "tools") return;
+    const hero = $("main").querySelector(".dashboard-hero");
+    if (!hero || $("editDecadeProfile")) return;
+    const button = document.createElement("button");
+    button.className = "dashboard-profile";
+    button.id = "editDecadeProfile";
+    button.type = "button";
+    button.textContent = "调整我的起点";
+    hero.appendChild(button);
+    button.addEventListener("click", openOnboarding);
+  };
 })();
