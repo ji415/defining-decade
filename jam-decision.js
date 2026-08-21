@@ -1,4 +1,7 @@
 (() => {
+  const extensions = window.DecadeExtensions;
+  if (!extensions) throw new Error("extension-runtime.js must load before jam-decision.js");
+
   const CRITERIA = [
     { key: "interest", label: "兴趣", hint: "我真的愿意长期投入吗" },
     { key: "ability", label: "能力", hint: "现有能力和学习曲线匹配吗" },
@@ -127,7 +130,7 @@
     if (rankingBox) rankingBox.innerHTML = rankingHtml(store);
   }
 
-  renderJam = function renderJamDecision(store = loadStore()) {
+  function renderJamDecision(store = loadStore()) {
     const jams = store.jams || ["", "", "", "", "", ""];
     $("main").innerHTML = `
       <p class="ch-kicker">练习 · 决策矩阵</p>
@@ -178,5 +181,7 @@
         renderJamDecision(loadStore());
       });
     });
-  };
+  }
+
+  extensions.registerToolRenderer("jam", renderJamDecision);
 })();
