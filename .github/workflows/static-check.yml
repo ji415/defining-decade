@@ -20,12 +20,14 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check app.js
+          node --check extension-runtime.js
           node --check enhancements.js
           node --check timeline-v2.js
           node --check dashboard.js
           node --check jam-decision.js
           node --check search.js
           node --check onboarding.js
+          node --check bootstrap.js
 
       - name: Check referenced static assets
         run: |
@@ -38,12 +40,14 @@ jobs:
           test -f search.css
           test -f onboarding.css
           grep -q 'src="app.js"' index.html
+          grep -q 'src="extension-runtime.js"' index.html
           grep -q 'src="enhancements.js"' index.html
           grep -q 'src="timeline-v2.js"' index.html
           grep -q 'src="dashboard.js"' index.html
           grep -q 'src="jam-decision.js"' index.html
           grep -q 'src="search.js"' index.html
           grep -q 'src="onboarding.js"' index.html
+          grep -q 'src="bootstrap.js"' index.html
           grep -q 'href="styles.css"' index.html
           grep -q 'href="enhancements.css"' index.html
           grep -q 'href="timeline-v2.css"' index.html
@@ -51,3 +55,16 @@ jobs:
           grep -q 'href="jam-decision.css"' index.html
           grep -q 'href="search.css"' index.html
           grep -q 'href="onboarding.css"' index.html
+
+      - name: Enforce extension registration architecture
+        run: |
+          files="enhancements.js timeline-v2.js dashboard.js jam-decision.js search.js onboarding.js bootstrap.js"
+          if grep -En '^[[:space:]]*(renderTools|renderChapter|renderMap|renderRail|renderCapital|renderJam|renderTimeline)[[:space:]]*=' $files; then
+            echo 'Feature modules must register through DecadeExtensions instead of overwriting renderers.'
+            exit 1
+          fi
+          grep -q 'registerToolRenderer("capital"' enhancements.js
+          grep -q 'registerToolRenderer("timeline"' timeline-v2.js
+          grep -q 'registerToolRenderer("jam"' jam-decision.js
+          grep -q 'extensions.on("tools:after"' dashboard.js
+          grep -q 'extensions.on("tools:after"' onboarding.js
