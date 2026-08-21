@@ -25,6 +25,7 @@ jobs:
           node --check dashboard.js
           node --check jam-decision.js
           node --check search.js
+          node --check onboarding.js
 
       - name: Check referenced static assets
         run: |
@@ -35,15 +36,18 @@ jobs:
           test -f dashboard.css
           test -f jam-decision.css
           test -f search.css
+          test -f onboarding.css
           grep -q 'src="app.js"' index.html
           grep -q 'src="enhancements.js"' index.html
           grep -q 'src="timeline-v2.js"' index.html
           grep -q 'src="dashboard.js"' index.html
           grep -q 'src="jam-decision.js"' index.html
           grep -q 'src="search.js"' index.html
+          grep -q 'src="onboarding.js"' index.html
           grep -q 'href="styles.css"' index.html
           grep -q 'href="enhancements.css"' index.html
           grep -q 'href="timeline-v2.css"' index.html
           grep -q 'href="dashboard.css"' index.html
           grep -q 'href="jam-decision.css"' index.html
           grep -q 'href="search.css"' index.html
+          grep -q 'href="onboarding.css"' index.html
