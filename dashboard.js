@@ -1,4 +1,7 @@
 (() => {
+  const extensions = window.DecadeExtensions;
+  if (!extensions) throw new Error("extension-runtime.js must load before dashboard.js");
+
   function actionStats(store) {
     const rows = [];
     let done = 0;
@@ -136,17 +139,10 @@
     });
   }
 
-  const baseRenderTools = renderTools;
-  renderTools = function renderToolsDashboard() {
-    if (state.tool) {
-      baseRenderTools();
-      return;
-    }
+  extensions.on("tools:after", ({ overview, main }) => {
+    if (!overview) return;
 
-    baseRenderTools();
-    const main = $("main");
     const originalNodes = [...main.childNodes];
-
     const template = document.createElement("template");
     template.innerHTML = dashboardHtml().trim();
     const dashboard = template.content.firstElementChild;
@@ -162,12 +158,10 @@
 
     main.append(dashboard, details);
     bindDashboardActions();
-  };
+  });
 
-  const baseRenderRail = renderRail;
-  renderRail = function renderRailDashboard() {
-    baseRenderRail();
-    const overview = $("rail").querySelector('[data-go="#tools"]');
+  extensions.on("rail:after", ({ rail }) => {
+    const overview = rail.querySelector('[data-go="#tools"]');
     if (overview) overview.textContent = "我的十年";
-  };
+  });
 })();
