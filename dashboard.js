@@ -3,8 +3,9 @@
     const rows = [];
     let done = 0;
     let total = 0;
+    const opened = new Set(store.opened || []);
 
-    CHAPTERS.forEach((chapter) => {
+    CHAPTERS.filter((chapter) => opened.has(chapter.id)).forEach((chapter) => {
       const states = (store.actions || {})[chapter.id] || [];
       chapter.monday.forEach((text, index) => {
         const checked = Boolean(states[index]);
@@ -82,8 +83,8 @@
                   </span>
                 </label>`).join("") : `
                 <div class="dashboard-empty">
-                  <strong>当前行动全部完成。</strong>
-                  <p>可以去读下一章，给未来的自己再找点麻烦。</p>
+                  <strong>${actions.total ? "当前行动全部完成。" : "先读一章，再决定行动。"}</strong>
+                  <p>${actions.total ? "可以去读下一章，给未来的自己再找点麻烦。" : "只有你真正打开过的章节，才会进入这里的行动清单。"}</p>
                 </div>`}
             </div>
           </section>
