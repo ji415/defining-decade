@@ -51,17 +51,41 @@
 ```text
 index.html
 ├── app.js                 # 原始内容、路由、基础练习
+├── extension-runtime.js   # 唯一 renderer 包装层：hooks + tool registry
 ├── enhancements.js        # 笔记、收藏、行动、数据备份
-├── timeline-v2.js         # 可视化十年时间线
-├── dashboard.js           # Personal Decade 仪表盘
-├── jam-decision.js        # 六瓶果酱决策矩阵
+├── timeline-v2.js         # 注册十年时间线 renderer
+├── dashboard.js           # 注册「我的十年」overview / rail hooks
+├── jam-decision.js        # 注册六瓶果酱 renderer
 ├── search.js              # 全局内容搜索
-└── onboarding.js          # 首次进入与个人起点设置
+├── onboarding.js          # 注册 onboarding / dashboard hook
+└── bootstrap.js           # 所有模块注册完后统一 reconcile 当前路由
 ```
+
+### 扩展约定
+
+功能模块不再直接写 `renderTools = ...`、`renderChapter = ...` 这类覆盖。页面扩展统一走 `DecadeExtensions`：
+
+```js
+DecadeExtensions.on("chapter:after", ({ main, store }) => {
+  // 给章节页面追加能力
+});
+
+DecadeExtensions.registerToolRenderer("my-tool", (store) => {
+  // 注册一个工具页 renderer
+});
+```
+
+`extension-runtime.js` 是唯一允许包装核心 renderer 的位置。这样新增功能不会依赖 `<script>` 的“最后覆盖者获胜”。
+
+`bootstrap.js` 会在全部模块注册完后重新 reconcile 当前 hash，因此直接打开 `#tools/jam`、`#tools/timeline` 等深链接也会使用新版 renderer。
 
 各增强模块使用独立 CSS，并通过 `onboarding.css` 补充统一的按钮动效与交互语言。
 
-GitHub Actions 会自动检查 JavaScript 语法和静态资源引用。
+GitHub Actions 会自动检查：
+
+- 所有 JavaScript 文件语法；
+- `index.html` 引用的静态资源是否存在；
+- 功能模块是否绕过 `DecadeExtensions` 直接覆盖核心 renderer。
 
 ## 本地运行
 
