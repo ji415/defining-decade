@@ -2,7 +2,9 @@
 
 梅格·杰伊 *The Defining Decade* 的私人速读站。不当书页翻，当咨询室用。
 
-打开 [index.html](index.html)，或看 GitHub Pages。
+在线阅读：https://ji415.github.io/defining-decade/
+
+本地打开 [index.html](index.html) 即可。
 
 - 总图：工作 / 爱情 / 大脑与身体
 - 22 篇可跳读：金句、来访者、证据、周一做什么
