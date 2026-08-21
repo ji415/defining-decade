@@ -144,8 +144,22 @@
 
     baseRenderTools();
     const main = $("main");
-    const original = main.innerHTML;
-    main.innerHTML = dashboardHtml() + `<details class="all-tools"><summary>查看全部练习说明</summary><div class="all-tools-content">${original}</div></details>`;
+    const originalNodes = [...main.childNodes];
+
+    const template = document.createElement("template");
+    template.innerHTML = dashboardHtml().trim();
+    const dashboard = template.content.firstElementChild;
+
+    const details = document.createElement("details");
+    details.className = "all-tools";
+    const summary = document.createElement("summary");
+    summary.textContent = "查看全部练习说明";
+    const content = document.createElement("div");
+    content.className = "all-tools-content";
+    originalNodes.forEach((node) => content.append(node));
+    details.append(summary, content);
+
+    main.append(dashboard, details);
     bindDashboardActions();
   };
 
