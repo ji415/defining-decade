@@ -1,4 +1,7 @@
 (() => {
+  const extensions = window.DecadeExtensions;
+  if (!extensions) throw new Error("extension-runtime.js must load before timeline-v2.js");
+
   const CATEGORIES = {
     work: "工作",
     study: "学习",
@@ -107,7 +110,7 @@
       </div>`).join("");
   }
 
-  renderTimeline = function renderTimelineV2(store) {
+  function renderTimelineV2(store = loadStore()) {
     const timeline = store.timeline || {};
     const { startAge, endAge } = timelineSettings(store);
     const milestones = milestonesFor(store, startAge, endAge);
@@ -187,13 +190,13 @@
         </div>
       </section>
 
-      <p class="save-hint">所有内容自动保存在这台浏览器里，也会包含在「练习 → 导出备份」中。</p>`;
+      <p class="save-hint">所有内容自动保存在这台浏览器里，也会包含在「我的十年 → 导出备份」中。</p>`;
 
     const updateRange = () => {
       const nextStart = clamp(ageNumber($("timelineStartAge").value, startAge), 15, 60);
       const nextEnd = clamp(ageNumber($("timelineEndAge").value, nextStart + 10), nextStart + 1, 70);
       saveSettings(nextStart, nextEnd);
-      renderTimeline(loadStore());
+      renderTimelineV2(loadStore());
     };
 
     $("timelineStartAge").addEventListener("change", updateRange);
@@ -215,7 +218,7 @@
         note: $("milestoneNote").value.trim()
       });
       saveMilestones(current);
-      renderTimeline(loadStore());
+      renderTimelineV2(loadStore());
     });
 
     $("main").querySelectorAll("[data-delete-milestone]").forEach((button) => {
@@ -223,7 +226,7 @@
         const id = button.dataset.deleteMilestone;
         const current = (loadStore().timelineMilestones || []).filter((item) => String(item.id) !== id);
         saveMilestones(current);
-        renderTimeline(loadStore());
+        renderTimelineV2(loadStore());
       });
     });
 
@@ -234,5 +237,7 @@
         saveStore({ timeline: nextTimeline });
       });
     });
-  };
+  }
+
+  extensions.registerToolRenderer("timeline", renderTimelineV2);
 })();
