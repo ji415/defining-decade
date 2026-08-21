@@ -1,0 +1,237 @@
+.chapter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -10px 0 24px;
+}
+
+.chapter-control,
+.mobile-menu-btn,
+.import-button {
+  border: 1px solid var(--line);
+  background: var(--cream);
+  color: var(--ink);
+  padding: 9px 13px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+
+.chapter-control:hover,
+.chapter-control.active {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.chapter-control.complete.active {
+  background: var(--ink);
+  color: var(--yellow);
+  border-color: var(--ink);
+}
+
+.chapter-note {
+  margin: 24px 0 8px;
+  padding: 20px 22px;
+  background: var(--cream);
+  border-top: 4px solid var(--ink);
+}
+
+.chapter-note label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.chapter-note textarea {
+  width: 100%;
+  min-height: 130px;
+  resize: vertical;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font: inherit;
+  line-height: 1.7;
+}
+
+.chapter-note p {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.action-list {
+  display: grid;
+  gap: 8px;
+}
+
+.action-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  cursor: pointer;
+}
+
+.action-item input {
+  width: 17px;
+  height: 17px;
+  margin-top: 4px;
+  accent-color: var(--red);
+}
+
+.action-item.done span {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.continue-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 28px;
+  padding: 18px 20px;
+  background: var(--ink);
+  color: var(--cream);
+  border-left: 7px solid var(--yellow);
+}
+
+.continue-card div {
+  min-width: 0;
+}
+
+.continue-card .continue-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--yellow);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .22em;
+}
+
+.continue-card strong {
+  display: block;
+  font-size: 18px;
+}
+
+.continue-card p {
+  margin-top: 3px;
+  color: rgba(244,239,230,.7);
+  font-size: 12px;
+}
+
+.continue-card button {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  background: var(--red);
+  color: #fff;
+  font-weight: 800;
+}
+
+.data-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 22px;
+  margin-top: 38px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: var(--cream);
+}
+
+.data-tools h2 {
+  margin-bottom: 5px;
+  font-size: 22px;
+}
+
+.data-tools p:not(.ch-kicker) {
+  max-width: 55ch;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.data-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.import-button {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.import-button input {
+  display: none;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--yellow);
+  border: 0;
+  color: var(--ink);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.import-button:focus-within {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+@media (max-width: 920px) {
+  .mobile-menu-btn {
+    display: block;
+    grid-area: menu;
+  }
+
+  .top {
+    grid-template-columns: 1fr auto auto auto;
+    grid-template-areas:
+      "brand progress map menu"
+      "parts parts parts parts";
+  }
+
+  .rail.mobile-open {
+    display: block;
+    position: fixed;
+    top: 96px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 18;
+    max-height: none;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(20,20,20,.2);
+  }
+
+  .continue-card,
+  .data-tools {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .continue-card button,
+  .data-actions {
+    width: 100%;
+  }
+
+  .data-actions > * {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+  }
+}

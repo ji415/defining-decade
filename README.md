@@ -1,13 +1,94 @@
-# 人生十年 · 不可辜负的 20 岁到 30 岁
+# 人生十年 · Personal Decade OS
 
-梅格·杰伊 *The Defining Decade* 的私人速读站。不当书页翻，当咨询室用。
+梅格·杰伊 *The Defining Decade* 的私人阅读与行动伴侣。
+
+> 不当书页翻，当咨询室用。读完不是目标；留下判断、做出行动、把未来放进时间轴才是。
 
 在线阅读：https://ji415.github.io/defining-decade/
 
-本地打开 [index.html](index.html) 即可。
+## 第一次打开
 
-- 总图：工作 / 爱情 / 大脑与身体
-- 22 篇可跳读：金句、来访者、证据、周一做什么
-- 练习：身份资本、六瓶果酱、弱连接、二十九问、十年时间线（存在浏览器本地）
+首次进入会出现一张轻量 onboarding：
 
-这是阅读笔记，不是原书替代。请支持原作。
+- 年龄可选；填写后会自动把十年时间线设为「当前年龄 → 当前年龄 + 10」
+- 可选择当前最想解决的问题：工作与方向 / 爱情与关系 / 时间与未来 / 自信与成长
+- 根据关注点直接进入最合适的章节或工具
+- 可以跳过；以后也能在「我的十年」里重新调整起点
+
+## 现在能做什么
+
+### 阅读
+
+- 22 篇可跳读章节：核心判断、来访者故事、证据、误区与行动建议
+- 阅读完成状态、收藏、个人章节笔记
+- 「继续阅读」入口与阅读进度
+- 全局内容搜索：支持标题、核心判断、故事、证据、误区和行动；快捷键 `⌘K` / `Ctrl+K` 或 `/`
+
+### 行动
+
+- 每章「周一做什么」可直接勾选，并持久保存
+- 顶部「我的十年」不是普通练习页，而是个人仪表盘入口
+- 仪表盘集中查看完成度、收藏、笔记、待行动事项和时间线里程碑
+
+### 决策工具
+
+- **身份资本**：盘点已有资本与未来 12 个月要积累的三项能力/经历
+- **六瓶果酱**：把无限可能压成最多六个真实选项，并从兴趣、能力、身份资本、机会空间、生活匹配五个维度比较
+- **弱连接**：记录可能把你接到圈外的人，以及一个两分钟就能帮的具体请求
+- **二十九问**：逐步讨论长期关系中真正重要的问题
+- **十年时间线 2.0**：按年龄添加工作、学习、爱情、家庭、财务、城市、身体等里程碑，并识别事件过度拥挤的年龄窗口
+
+## 数据与隐私
+
+所有个人笔记、选择、评分、onboarding 设置和时间线默认只存在当前浏览器的 `localStorage` 中，不上传服务器。
+
+可以在「我的十年」页面导出 JSON 备份，并在其他浏览器中恢复。
+
+## 技术
+
+项目保持为零构建步骤的 Vanilla HTML / CSS / JavaScript，可直接部署到 GitHub Pages。
+
+```text
+index.html
+├── app.js                 # 原始内容、路由、基础练习
+├── extension-runtime.js   # 唯一 renderer 包装层：hooks + tool registry
+├── enhancements.js        # 笔记、收藏、行动、数据备份
+├── timeline-v2.js         # 注册十年时间线 renderer
+├── dashboard.js           # 注册「我的十年」overview / rail hooks
+├── jam-decision.js        # 注册六瓶果酱 renderer
+├── search.js              # 全局内容搜索
+├── onboarding.js          # 注册 onboarding / dashboard hook
+└── bootstrap.js           # 所有模块注册完后统一 reconcile 当前路由
+```
+
+### 扩展约定
+
+功能模块不再直接写 `renderTools = ...`、`renderChapter = ...` 这类覆盖。页面扩展统一走 `DecadeExtensions`：
+
+```js
+DecadeExtensions.on("chapter:after", ({ main, store }) => {
+  // 给章节页面追加能力
+});
+
+DecadeExtensions.registerToolRenderer("my-tool", (store) => {
+  // 注册一个工具页 renderer
+});
+```
+
+`extension-runtime.js` 是唯一允许包装核心 renderer 的位置。这样新增功能不会依赖 `<script>` 的“最后覆盖者获胜”。
+
+`bootstrap.js` 会在全部模块注册完后重新 reconcile 当前 hash，因此直接打开 `#tools/jam`、`#tools/timeline` 等深链接也会使用新版 renderer。
+
+各增强模块使用独立 CSS，并通过 `onboarding.css` 补充统一的按钮动效与交互语言。
+
+GitHub Actions 会自动检查：
+
+- 所有 JavaScript 文件语法；
+- `index.html` 引用的静态资源是否存在；
+- 功能模块是否绕过 `DecadeExtensions` 直接覆盖核心 renderer。
+
+## 本地运行
+
+直接打开 `index.html` 即可；也可以使用任意静态 HTTP Server。
+
+这是阅读笔记与个人思考工具，不是原书替代。请支持原作。
