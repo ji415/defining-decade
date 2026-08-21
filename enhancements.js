@@ -1,5 +1,7 @@
 (() => {
   const STORE_VERSION = 2;
+  const extensions = window.DecadeExtensions;
+  if (!extensions) throw new Error("extension-runtime.js must load before enhancements.js");
 
   function migrateStore() {
     const store = loadStore();
@@ -17,7 +19,7 @@
 
   migrateStore();
 
-  // Reading progress now means explicitly completed chapters, not merely opened ones.
+  // Reading progress means explicitly completed chapters, not merely opened ones.
   readSet = function readSetV2() {
     return new Set(loadStore().completed || []);
   };
@@ -35,15 +37,13 @@
     $("progressLabel").textContent = `${readSet().size} / ${CHAPTERS.length}`;
   };
 
-  // Fix persisted user content rendering in the identity-capital exercise.
-  const baseRenderCapital = renderCapital;
-  renderCapital = function renderCapitalSafe(store) {
-    const safeStore = {
+  // The legacy capital renderer interpolates chip text into HTML; escape its view-model here.
+  extensions.registerToolRenderer("capital", (store) => {
+    extensions.renderBaseTool("capital", {
       ...store,
       capital: (store.capital || []).map((item) => escapeHtml(item))
-    };
-    return baseRenderCapital(safeStore);
-  };
+    });
+  });
 
   function toggleInList(key, id) {
     const set = new Set(loadStore()[key] || []);
@@ -130,11 +130,7 @@
     });
   }
 
-  const baseRenderChapter = renderChapter;
-  renderChapter = function renderChapterV2() {
-    baseRenderChapter();
-    enhanceChapter();
-  };
+  extensions.on("chapter:after", enhanceChapter);
 
   function continueCard() {
     const store = loadStore();
@@ -152,12 +148,10 @@
       </section>`;
   }
 
-  const baseRenderMap = renderMap;
-  renderMap = function renderMapV2() {
-    baseRenderMap();
+  extensions.on("map:after", () => {
     const card = continueCard();
     if (card) $("main").insertAdjacentHTML("afterbegin", card);
-  };
+  });
 
   function exportData() {
     const payload = {
@@ -189,10 +183,8 @@
     reader.readAsText(file);
   }
 
-  const baseRenderTools = renderTools;
-  renderTools = function renderToolsV2() {
-    baseRenderTools();
-    if (state.tool) return;
+  extensions.on("tools:after", ({ overview }) => {
+    if (!overview) return;
     $("main").insertAdjacentHTML("beforeend", `
       <section class="data-tools">
         <div>
@@ -210,7 +202,7 @@
       const file = event.target.files?.[0];
       if (file) importData(file);
     });
-  };
+  });
 
   function installMobileMenu() {
     const topRight = document.querySelector(".top-right");
@@ -230,7 +222,7 @@
 
   installMobileMenu();
 
-  // Re-render once so direct hash visits also use the upgraded renderers.
+  // Re-render once so direct hash visits also use the registered extensions.
   if (location.hash && location.hash !== "#cover") navigate(location.hash);
   else updateProgress();
 })();
