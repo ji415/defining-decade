@@ -1,0 +1,205 @@
+.global-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  background: rgba(255,255,255,.08);
+  color: var(--cream);
+  border: 1px solid rgba(255,255,255,.14);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.global-search-btn span { color: var(--yellow); font-size: 16px; line-height: 1; }
+.global-search-btn kbd {
+  margin-left: 2px;
+  padding: 1px 5px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 3px;
+  color: rgba(244,239,230,.58);
+  font: 10px/1.5 var(--sans);
+}
+
+.global-search-btn:hover { background: var(--red); color: #fff; }
+.global-search-btn:hover span { color: var(--yellow); }
+
+.global-search-dialog {
+  width: min(760px, calc(100vw - 28px));
+  max-height: min(78vh, 720px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.global-search-dialog::backdrop {
+  background: rgba(20,20,20,.72);
+  backdrop-filter: blur(3px);
+}
+
+.search-shell {
+  overflow: hidden;
+  max-height: min(78vh, 720px);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-2);
+  box-shadow: 0 28px 90px rgba(0,0,0,.36);
+  border-top: 7px solid var(--red);
+}
+
+.search-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 16px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+}
+
+.search-icon {
+  color: var(--red);
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.search-header input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.search-header input::placeholder { color: #8b867e; font-weight: 500; }
+.search-header button {
+  padding: 6px 8px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.search-summary {
+  padding: 9px 17px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+}
+
+.search-results {
+  overflow-y: auto;
+  padding: 9px;
+}
+
+.search-result {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 13px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.search-result:hover,
+.search-result:focus-visible {
+  background: var(--cream);
+}
+
+.search-result-n {
+  font-family: var(--display);
+  color: var(--red);
+  font-size: 29px;
+  line-height: 1;
+}
+
+.search-result-body { min-width: 0; }
+.search-result-meta {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.search-result strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 900;
+}
+.search-result small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.search-result mark {
+  padding: 0 2px;
+  background: var(--yellow);
+  color: var(--ink);
+}
+.search-result-arrow {
+  color: var(--red);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.search-empty {
+  padding: 38px 28px;
+  text-align: center;
+  background: var(--cream);
+}
+.search-empty strong { font-size: 19px; }
+.search-empty p { margin-top: 5px; color: var(--muted); font-size: 13px; }
+
+.search-tips > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+  margin: 16px 0 10px;
+}
+.search-tips button {
+  padding: 7px 10px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 800;
+}
+.search-tips button:hover { border-color: var(--red); color: var(--red); }
+
+@media (max-width: 920px) {
+  .global-search-btn {
+    grid-area: search;
+    padding: 7px 9px;
+  }
+  .global-search-btn b,
+  .global-search-btn kbd { display: none; }
+
+  .top {
+    grid-template-columns: 1fr auto auto auto auto;
+    grid-template-areas:
+      "brand progress map search menu"
+      "parts parts parts parts parts";
+  }
+
+  .global-search-dialog {
+    width: calc(100vw - 16px);
+    max-height: 88vh;
+  }
+  .search-shell { max-height: 88vh; }
+  .search-result { grid-template-columns: 38px minmax(0,1fr) auto; gap: 8px; }
+  .search-result-n { font-size: 24px; }
+}
