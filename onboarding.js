@@ -173,13 +173,20 @@
     baseRenderTools();
     if (state.tool || state.view !== "tools") return;
     const hero = $("main").querySelector(".dashboard-hero");
-    if (!hero || $("editDecadeProfile")) return;
+    const timelineButton = hero?.querySelector(".dashboard-timeline");
+    if (!hero || !timelineButton || $("editDecadeProfile")) return;
+
+    const actions = document.createElement("div");
+    actions.className = "dashboard-hero-actions";
+    timelineButton.replaceWith(actions);
+    actions.appendChild(timelineButton);
+
     const button = document.createElement("button");
     button.className = "dashboard-profile";
     button.id = "editDecadeProfile";
     button.type = "button";
     button.textContent = "调整我的起点";
-    hero.appendChild(button);
+    actions.appendChild(button);
     button.addEventListener("click", openOnboarding);
   };
 })();
