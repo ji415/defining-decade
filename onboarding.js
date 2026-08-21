@@ -84,7 +84,10 @@
     ageInput.setCustomValidity("");
     storeProfile(age, focus);
     $("decadeOnboarding").close();
-    go(ROUTES[focus] || "#map");
+
+    const target = ROUTES[focus] || "#map";
+    if (location.hash === target) navigate(target);
+    else go(target);
   }
 
   function installOnboarding() {
@@ -189,4 +192,6 @@
     actions.appendChild(button);
     button.addEventListener("click", openOnboarding);
   };
+
+  if (state.view === "tools" && !state.tool) renderTools();
 })();
